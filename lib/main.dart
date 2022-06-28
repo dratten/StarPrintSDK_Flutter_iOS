@@ -53,6 +53,8 @@ class _MyHomePageState extends State<MyHomePage> {
   static const platform = MethodChannel('krossroads.flutter.dev/print');
 
   String _printStatus = 'Print';
+  String _connectStatus = 'Connect';
+  String _drawerStatus = 'Drawer';
 
   Future<void> _printSample() async {
     String printStatus;
@@ -68,6 +70,34 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<void> _connectSample() async {
+    String printStatus;
+    try {
+      final String result = await platform.invokeMethod('connectSample');
+      printStatus = 'Printer connected successfully';
+    } on PlatformException catch (e) {
+      printStatus = "Failed to print: '${e.message}'.";
+    }
+
+    setState(() {
+      _connectStatus = printStatus;
+    });
+  }
+
+  Future<void> _drawerSample() async {
+    String printStatus;
+    try {
+      final String result = await platform.invokeMethod('drawerSample');
+      printStatus = 'Drawer successfully';
+    } on PlatformException catch (e) {
+      printStatus = "Failed to open drawer: '${e.message}'.";
+    }
+
+    setState(() {
+      _drawerStatus = printStatus;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,12 +109,28 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
+              _connectStatus,
+            ),
+            FloatingActionButton(
+              onPressed: _connectSample,
+              tooltip: 'Connect Printer',
+              child: const Text('Connect Printer'),
+            ),
+            Text(
               _printStatus,
             ),
             FloatingActionButton(
               onPressed: _printSample,
               tooltip: 'Print',
               child: const Text('Print'),
+            ),
+            Text(
+              _drawerStatus,
+            ),
+            FloatingActionButton(
+              onPressed: _drawerSample,
+              tooltip: 'Open drawer',
+              child: const Text('Open drawer'),
             )
           ],
         ),
