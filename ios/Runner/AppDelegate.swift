@@ -73,6 +73,11 @@ var currentSetting: PrinterSetting? = nil
     printChannel.setMethodCallHandler({
         (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
         
+        guard call.method == "connectSample" else {
+            result(FlutterMethodNotImplemented)
+            return
+        }
+        
         refreshPortInfo()
         didSelectModel(1)
         PrinterFunctions.createTextReceiptData(emulation, localizeReceipts: localizeReceipts, utf8: false)
